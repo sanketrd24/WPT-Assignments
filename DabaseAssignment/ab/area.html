@@ -1,0 +1,77 @@
+<html>
+    <head>
+        <script
+        src="https://code.jquery.com/jquery-3.6.0.js"
+        ></script>
+        <script>
+            $(()=>{
+                // console.log("started");
+
+                $('#pin2').blur(
+                    ()=>{
+                        console.log("blur event");
+                        ip={pincode:$("#pin2").val()};
+                        let parameters={
+                            data:ip,
+                            url:"http://localhost:789/getpincode",
+                            type:'get',
+                            dataType:'json',
+                            success:(datafromserver)=>{
+                                console.log("data from server :"+datafromserver.status);
+
+                                if(datafromserver.status==true){
+                                    $("#ar1").val(datafromserver.details.area);
+                                }else{
+                                    $("#ar1").val("not found");
+                                }
+                            },
+
+                            error:(error)=>{
+                                console.log(error);
+                            }
+                           
+                        }
+                        $.ajax(parameters);
+                    }
+                );
+
+
+                $('#upd').click(
+                    ()=>{
+                        console.log("blur event");
+                        ip={pincode:$("#pin2").val(),area:$("#ar1").val()};
+                        let parameters={
+                            data:ip,
+                            url:"http://localhost:789/updatearea",
+                            type:'get',
+                            dataType:'json',
+                            success:(datafromserver)=>{
+                                console.log("data from server :"+datafromserver.status);
+
+                                if(datafromserver.status==true){
+                                    $("#span1").text("Area updated");
+                                }else{
+                                    $("#span1").text("not updated");
+                                }
+                            },
+
+                            error:(error)=>{
+                                console.log(error);
+                            }
+                           
+                        }
+                        $.ajax(parameters);
+                    }
+                );
+            })
+        </script>
+    </head>
+    <body>
+        <!-- <form action="getpincode" method="get"> -->
+            <input type="text" name="pincode" id="pin2" placeholder="Enter Pincode"/><br>
+            <input type="text" name="area" id="ar1" placeholder="Area"/>
+            <span id="span1">Area </span>
+            <button id="upd">update</button>
+        <!-- </form> -->
+    </body>
+</html>
